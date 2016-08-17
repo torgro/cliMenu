@@ -214,7 +214,14 @@ PROCESS
             break
         }
 
-        $menuItem.ParentMenu = $MainMenu.Id
+        if ($PSBoundParameters.ContainsKey("ParentMenuID"))
+        {
+             $menuItem.ParentMenu = $ParentMenuID
+        }
+        else
+        {
+            $menuItem.ParentMenu = $MainMenu.Id
+        }        
 
         Write-Verbose -Message "$f -  Adding menuItem [$Name]"
 
@@ -475,7 +482,6 @@ END
             $textLine += " " * (($maxWith - 1) - $textLine.Length - 1)
         }
         
-
         [pscustomobject]@{
             Text = "$textLine"
             Color = $color
@@ -512,7 +518,7 @@ END
 
     $currentMenuItems = Get-MenuItem | Where-Object ParentMenu -eq $mainMenu.id
 
-    foreach($item in $currentMenuItems)
+    foreach ($item in $currentMenuItems)
     {  
         $menuColor = $script:MenuOptions.MenuItemColor
         $null = $menuLines.Add((Get-MenuLine -Text "$($item.Id). $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))

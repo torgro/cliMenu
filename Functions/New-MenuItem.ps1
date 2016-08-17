@@ -58,7 +58,14 @@ PROCESS
             break
         }
 
-        $menuItem.ParentMenu = $MainMenu.Id
+        if ($PSBoundParameters.ContainsKey("ParentMenuID"))
+        {
+             $menuItem.ParentMenu = $ParentMenuID
+        }
+        else
+        {
+            $menuItem.ParentMenu = $MainMenu.Id
+        }        
 
         Write-Verbose -Message "$f -  Adding menuItem [$Name]"
 

@@ -12,10 +12,10 @@
 RootModule = 'CliMenu.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.5.0'
+ModuleVersion = '1.0.6.0'
 
 # ID used to uniquely identify this module
-GUID = '6ff4466e-a9ca-486d-9b65-45bec5f16975'
+GUID = '93c484eb-26ba-4d8b-80c1-7befab69667b'
 
 # Author of this module
 Author = 'Tore Grøneng @toregroneng tore@firstpoint.no'

@@ -127,7 +127,7 @@ END
 
     $currentMenuItems = Get-MenuItem | Where-Object ParentMenu -eq $mainMenu.id
 
-    foreach($item in $currentMenuItems)
+    foreach ($item in $currentMenuItems)
     {  
         $menuColor = $script:MenuOptions.MenuItemColor
         $null = $menuLines.Add((Get-MenuLine -Text "$($item.Id). $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))
