@@ -1,5 +1,37 @@
 function Show-Menu
 {
+<#
+.Synopsis
+   Show a Menu.
+.DESCRIPTION
+   If executed without parameters, it will build and show the main Menu. If the MenuID parameter is 
+   specified, it will show the menu with that ID. You may also use the cmdlet to invoke a specific 
+   Menu-Item on a specific menu.
+.EXAMPLE
+   c:> Show-Menu
+   
+   This will show the main Menu if defined.
+.EXAMPLE
+   c:> Show-Menu -MenuId 1
+   
+   This will show the menu at index 1. Use Get-Menu to find the index (zero-based array)
+.EXAMPLE
+   c:> Show-Menu -InvokeItem 2 -MenuId 0
+   
+   This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
+   confirmation before invoking it, the user will be prompted before invokation.
+.EXAMPLE
+   c:> Show-Menu -InvokeItem 2 -MenuId 0 -force
+   
+   This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
+   confirmation before invoking it, the user will not be prompted before invokation since the
+   force flag has been specified.
+.NOTES
+   NAME: Show-Menu
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
 [cmdletbinding()]
 Param
 (
@@ -22,7 +54,7 @@ BEGIN
 
     if (-not $mainMenu)
     {
-        Write-Warning -Message "Please add a menu first"
+        Write-Warning -Message "Please add a menu first using the New-Menu cmdlet"
         break
     }
 }
@@ -31,7 +63,7 @@ PROCESS
 {
     if ($PSBoundParameters.ContainsKey("InvokeItem"))
     {
-        $menuSelected = $script:menuItems.Where({$_.ID -eq $InvokeItem})
+        $menuSelected = $script:Menus[$MenuID].MenuItems[$InvokeItem]
 
         if($menuSelected)
         {
@@ -99,17 +131,23 @@ END
 
     if ($PSBoundParameters.ContainsKey("MenuID"))
     {
-        $mainMenu = Get-Menu | where Id -eq $MenuID
-        if (-not $mainMenu)
+        $menu = Get-Menu -MenuId $MenuID
+        if (-not $menu)
         {
             Write-Error -Exception "$f -  Could not find menu with ID [$MenuID]"
         }
-    }    
+    }
+    else 
+    {
+        $menu = Get-Menu -MainMenu
+    }
+
+    $menuIndex = $script:Menus.IndexOf($menu)
    
     $menuFrame = $script:MenuOptions.MenuFillChar * ($maxWith - 2)
     $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
 
-    $null = $menuLines.Add((Get-MenuLine -Text $mainMenu.DisplayName -Color $script:MenuOptions.MenuNameColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menu.DisplayName -Color $script:MenuOptions.MenuNameColor))
     
     $menuEmptyLine = " " * ($maxWith - 2)
     $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
@@ -125,12 +163,11 @@ END
     $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
     $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
 
-    $currentMenuItems = Get-MenuItem | Where-Object ParentMenu -eq $mainMenu.id
-
-    foreach ($item in $currentMenuItems)
+    foreach ($item in $menu.MenuItems)
     {  
         $menuColor = $script:MenuOptions.MenuItemColor
-        $null = $menuLines.Add((Get-MenuLine -Text "$($item.Id). $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))
+        $menuItemIndex = $script:menus[$menuIndex].MenuItems.IndexOf($item)
+        $null = $menuLines.Add((Get-MenuLine -Text "$menuItemIndex. $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))
     }
 
     $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
@@ -147,19 +184,21 @@ END
         Write-Host -Object $line.Text -ForegroundColor $line.Color -NoNewline
         Write-Host -Object $script:MenuOptions.MenuFillChar -ForegroundColor $script:MenuOptions.MenuFillColor
     }
+
     $userSelection = (Read-Host -Prompt "Please enter number to execute action")
 
     try
     {
-        $actionItemSelectionIndex = [int]$userSelection
+        $actionItemSelectionIndex = [int]($userSelection)
     }
     catch
     {
+        Write-Error -Message $_.Exception.Message
         Write-Host -Object "Menuitem not found [$userSelection]" -ForegroundColor DarkYellow
         break
     }
 
-    $menuSelected = $script:menuItems.Where({$_.ID -eq $actionItemSelectionIndex})
+    $menuSelected = $menu.MenuItems[$actionItemSelectionIndex]
 
     if ($menuSelected)
     {
@@ -183,6 +222,7 @@ END
     {
         Write-Host -Object "Menuitem not found [$userSelection]" -ForegroundColor DarkYellow
     }
+
     Write-Verbose -Message "$f-  END"
 }
 }

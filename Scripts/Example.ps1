@@ -9,7 +9,7 @@ $newItem = @{
     ActionScriptblock = { show-command -Name Write-host }
 }
 
-New-MenuItem @newItem
+New-MenuItem @newItem -Verbose
 
 
 $newItem = @{

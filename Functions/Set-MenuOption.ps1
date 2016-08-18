@@ -1,4 +1,4 @@
-    function Set-MenuOption
+function Set-MenuOption
 {
 [cmdletbinding()]
 Param
@@ -16,13 +16,13 @@ Param
     $HeadingColor = [consolecolor]::white
     ,
     [string]
-    $SubHeading = "[SubHeading not set ]"
+    $SubHeading = "[SubHeading not set]"
     ,
     [ConsoleColor]
     $SubHeadingColor = [consolecolor]::white
     ,
     [string]
-    $FooterText = "[FooterText not set]"
+    $FooterText
     ,
     [ConsoleColor]
     $FooterTextColor = [consolecolor]::white

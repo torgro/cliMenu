@@ -14,22 +14,29 @@ Param
 )
 
 BEGIN
-{}
+{
+    $f = $MyInvocation.InvocationName
+    Write-Verbose -Message "$f - START"
+}
 
 PROCESS
 {
     $menu = $script:Menus.Where({$_.Name -eq "$Name"})
-
+    
     if ($menu)
     {
+        $menuIndex = $script:Menus.IndexOf($menu)
+
         foreach ($key in $PSBoundParameters.Keys)
         {
             Write-Verbose -Message "$f -  Setting [$key] to value $($PSBoundParameters.$key)"
-            $script:Menus[$menu.id].$key = $PSBoundParameters.$key
+            $script:Menus[$menuIndex].$key = $PSBoundParameters.$key
         }    
     }       
 }
 
 END
-{}
+{
+    Write-Verbose -Message "$f - END"
+}
 }

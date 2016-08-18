@@ -1,4 +1,4 @@
-$script:menuItems = New-Object -TypeName System.Collections.ArrayList
+#$script:menuItems = New-Object -TypeName System.Collections.ArrayList
 
 $script:Menus = New-Object -TypeName System.Collections.ArrayList
 
@@ -18,15 +18,55 @@ $script:MenuOptions = [pscustomobject]@{
 
 function Get-Menu
 {
-[cmdletbinding()]
+<#
+.Synopsis
+   Get a list of menus
+.DESCRIPTION
+   Returns a list of menus by name, id or just the main menu
+.EXAMPLE
+   c:> Get-Menu
+   
+   Returns all menus
+.EXAMPLE
+   c:> Get-Menu -MainMenu
+   
+   Returns the Main Menu only
+.EXAMPLE
+   c:> Get-Menu -MenuID 1
+   
+   Returns the menu of the specified index
+.EXAMPLE
+   c:> Get-Menu -Name main*
+   
+   Returns all the menus which has a name that starts with main
+.NOTES
+   NAME: Get-Menu
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
+[cmdletbinding(DefaultParameterSetName='none')]
+[OutputType([PSCustomObject])]
 Param
 (
+    [Parameter(ParameterSetName="MainMenu")]
     [switch]
     $MainMenu
+    ,
+    [Parameter(ParameterSetName='ByID')]
+    [int]
+    $MenuID
+    ,
+    [Parameter(ParameterSetName="ByName")]
+    [string]
+    $Name
 )
 
 BEGIN
-{}
+{
+    $f = $MyInvocation.InvocationName
+    Write-Verbose -Message "$f - START"
+}
 
 PROCESS
 {
@@ -34,12 +74,25 @@ PROCESS
     {
         $script:Menus.Where({$_.IsMainMenu -eq $true})
     }
-    else
+    
+    if ($PSBoundParameters.ContainsKey("MenuID"))
+    {
+        $script:Menus[$MenuID]
+    }
+
+    if ($PSBoundParameters.ContainsKey("Name"))
+    {
+        $script:Menus.Where({$_.Name -like "$Name"})
+    }
+    
+    if($PSCmdLet.ParameterSetName -eq "none")
     {
         $script:Menus
     }
 }
 
 END
-{}
+{
+    Write-Verbose -Message "$f - END"
+}
 }

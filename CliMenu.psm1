@@ -1,4 +1,4 @@
-﻿$script:menuItems = New-Object -TypeName System.Collections.ArrayList
+﻿#$script:menuItems = New-Object -TypeName System.Collections.ArrayList
 
 $script:Menus = New-Object -TypeName System.Collections.ArrayList
 
@@ -18,44 +18,48 @@ $script:MenuOptions = [pscustomobject]@{
 
 function Get-Menu
 {
-[cmdletbinding()]
+<#
+.Synopsis
+   Get a list of menus
+.DESCRIPTION
+   Returns a list of menus by name, id or just the main menu
+.EXAMPLE
+   c:> Get-Menu
+   
+   Returns all menus
+.EXAMPLE
+   c:> Get-Menu -MainMenu
+   
+   Returns the Main Menu only
+.EXAMPLE
+   c:> Get-Menu -MenuID 1
+   
+   Returns the menu of the specified index
+.EXAMPLE
+   c:> Get-Menu -Name main*
+   
+   Returns all the menus which has a name that starts with main
+.NOTES
+   NAME: Get-Menu
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
+[cmdletbinding(DefaultParameterSetName='none')]
+[OutputType([PSCustomObject])]
 Param
 (
+    [Parameter(ParameterSetName="MainMenu")]
     [switch]
     $MainMenu
-)
-
-BEGIN
-{}
-
-PROCESS
-{
-    if ($PSBoundParameters.ContainsKey("MainMenu"))
-    {
-        $script:Menus.Where({$_.IsMainMenu -eq $true})
-    }
-    else
-    {
-        $script:Menus
-    }
-}
-
-END
-{}
-}
-
-function Get-MenuItem
-{
-[cmdletbinding(DefaultParameterSetName='none')]
-Param
-(
-    [Parameter(ParameterSetName="ByName")]
-    [string[]]
-    $Name = "*"
     ,
-    [Parameter(ValueFromPipeline,ParameterSetName="ById")]
-    [int[]]
-    $Id 
+    [Parameter(ParameterSetName='ByID')]
+    [int]
+    $MenuID
+    ,
+    [Parameter(ParameterSetName="ByName")]
+    [string]
+    $Name
 )
 
 BEGIN
@@ -66,45 +70,179 @@ BEGIN
 
 PROCESS
 {
-    if (-not $PSBoundParameters.ContainsKey("Name") -and -not $PSBoundParameters.ContainsKey("Id"))
+    if ($PSBoundParameters.ContainsKey("MainMenu"))
     {
-        $script:menuItems
+        $script:Menus.Where({$_.IsMainMenu -eq $true})
+    }
+    
+    if ($PSBoundParameters.ContainsKey("MenuID"))
+    {
+        $script:Menus[$MenuID]
     }
 
     if ($PSBoundParameters.ContainsKey("Name"))
     {
-        foreach ($menuName in $Name)
-        {
-            $script:menuItems.Where({$_.Name -like $Name})
-        }
+        $script:Menus.Where({$_.Name -like "$Name"})
     }
-
-    if ($PSBoundParameters.ContainsKey("Id"))
+    
+    if($PSCmdLet.ParameterSetName -eq "none")
     {
-        $script:menuItems.Where({$_.Id -in $id})
+        $script:Menus
     }
 }
 
 END
 {
-    Write-Verbose -Message "$f-  END"
+    Write-Verbose -Message "$f - END"
+}
+}
+
+function Get-MenuItem
+{
+<#
+.Synopsis
+   Get a list of menu-items
+.DESCRIPTION
+   Returns a list of menus by Menu-name, Menu-ID or the menu object
+.EXAMPLE
+   c:> Get-MenuItem
+   
+   Returns all menu-items for all menus
+.EXAMPLE
+   c:> Get-MenuItem -MenuName MainMenu
+   
+   Returns the menu-items for the menu with name MainMenu
+.EXAMPLE
+   c:> Get-MenuItem -MenuId 1
+   
+   Returns the menu-items for the menu with id 1
+.EXAMPLE
+   c:> $Menu = Get-Menu -Name SubMenuSkype
+   c:> Get-MenuItem -MenuObject $Menu
+   
+   Returns all the menu-items for the menu with name SubMenuSkype
+.EXAMPLE   
+   c:> Get-Menu -Name SubMenuSkype | Get-MenuItem
+   
+   Returns all the menu-items for the menu with name SubMenuSkype
+.NOTES
+   NAME: Get-MenuItem
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
+[cmdletbinding(DefaultParameterSetName='none')]
+[OutputType([PSCustomObject])]
+Param
+(
+    [Parameter(ParameterSetName="ByName")]
+    [string[]]
+    $MenuName
+    ,
+    [Parameter(ParameterSetName="ById")]
+    [int]
+    $MenuId
+    ,
+    [Parameter(ValueFromPipeline, ParameterSetName="ByObject")]
+    [PSCustomObject]
+    $MenuObject
+)
+
+BEGIN
+{
+    $f = $MyInvocation.InvocationName
+    Write-Verbose -Message "$f - START"
+}
+
+PROCESS
+{    
+    if ($PSCmdlet.ParameterSetName -eq "none")
+    {        
+        $script:Menus.MenuItems 
+    }
+
+    if ($PSBoundParameters.ContainsKey("MenuName"))
+    {
+        write-verbose -message "$f -  Getting by MenuName"
+        $script:Menus.Where({$_.Name -eq "$MenuName"})
+    }
+
+    if ($PSBoundParameters.Containskey("MenuId"))
+    {
+        $script:Menus[$MenuId].MenuItems
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq "ByObject")
+    {
+        $MenuObject.MenuItems
+    }
+}
+
+END
+{
+    Write-Verbose -Message "$f - END"
 }
 }
 
 function Get-MenuOption
 {
+<#
+.Synopsis
+   Get a list menu options
+.DESCRIPTION
+   Returns a PSCustomObject with all menu options. This CmdLet has no parameters
+.EXAMPLE
+   c:> Get-MenuOption
+   
+   Returns all menu-items for all menus
+.NOTES
+   NAME: Get-MenuItem
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
 [cmdletbinding()]
+[OutputType([PSCustomObject])]
 Param
 ()
-
     $script:MenuOptions
 }
 
 function New-Menu
 {
+<#
+.Synopsis
+   Create a new Menu
+.DESCRIPTION
+   You can create as many menus you like, however you may only have one main Menu. The Menu must
+   have a name, hence the Name parameter is Mandatory. The first Menu you create will become
+   the main Menu even if you do not specify the IsMainMenu switch.
+.PARAMETER Name
+   Normally you would like to specify a name without space and Camel-case the name.
+.EXAMPLE
+   c:> New-Menu -Name "MainMenu"
+   
+   This will create a new Menu with name MainMenu. If this is the first Menu, it will be
+   created as a main Menu
+.EXAMPLE
+   c:> New-Menu -Name "MainMenu" -IsMainMenu
+   
+   This will create a new Menu with name MainMenu and set is as a main Menu
+.EXAMPLE
+   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype"
+   
+   This will create a new Menu with name sub1 and DisplayName Sub-Menu for Skype
+.NOTES
+   NAME: New-Menu
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
 [cmdletbinding()]
+[OutputType([PSCustomObject])]
 Param
 (
+    [Parameter(Mandatory)]
     [string]
     $Name
     ,
@@ -118,15 +256,16 @@ Param
 BEGIN
 {
     $f = $MyInvocation.InvocationName
+    Write-Verbose -Message "$f - START"
 }
 
 PROCESS
 {
     $newMenu = [PSCustomObject]@{
-        Id  =0
         Name = "$Name"
         DisplayName = "$DisplayName"
-        IsMainMenu = $false
+        IsMainMenu = $IsMainMenu
+        MenuItems = New-Object -TypeName System.Collections.ArrayList
     }
 
     if ($PSBoundParameters.ContainsKey("IsMainMenu"))
@@ -143,9 +282,9 @@ PROCESS
         }
     }
 
-    $index = $script:Menus.Add($newMenu)
-    $script:Menus[$index].Id = $index
-
+    write-Verbose -Message "Creating menu [$Name]"
+    $null = $script:Menus.Add($newMenu)
+    $newMenu
 }
 
 END
@@ -156,26 +295,96 @@ END
 
 function New-MenuItem
 {
-[cmdletbinding()]
+<#
+.Synopsis
+   Create a new Menu-Item for a Menu.
+.DESCRIPTION
+   Menu-Items are the action elements of the Menu. You add Menu-Items to a Menu. 
+.EXAMPLE
+   c:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -ActionScriptblock { Set-UserPassword }
+   
+   This will create a new Menu-Item. If selected it will execute the custom cmdlet Set-UserPassword. 
+   Since no MenuId is specified, it will be added to the Main-Menu. The switch parameter DisableConfirm
+   is not specified and the user will have to confirm the invokation after it has been selected. 
+.EXAMPLE
+   c:> $menu = Get-Menu -Name sub1
+   c:> $NewMenuItem = @{
+           Name = "UnlockUser"
+           DisplayName = "Unlock a user"
+           ActionScriptblock = { Unlock-UserObject }
+           DisableConfirm = $true
+       }
+   c:> $menu | New-MenuItem @NewMenuItem
+   
+   This will create a new Menu-Item for the menu named sub1. The Menu-object is piped into the New-MenuItem cmdlet.
+   It will invoke a custom cmdlet Unlock-UserObject and it will not confirm with the user before invokation.
+.EXAMPLE
+   c:> $NewMenuItem = @{
+           Name = "UnlockUser"
+           DisplayName = "Unlock a user"
+           ActionScriptblock = { Unlock-UserObject }
+           DisableConfirm = $true
+       }
+   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
+   
+   This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
+   It will invoke a custom cmdlet Unlock-UserObject and it will not confirm with the user before invokation.
+.EXAMPLE
+   c:> $NewMenuItem = @{
+           Name = "UnlockUser"
+           DisplayName = "Unlock a user"
+           ActionScriptblock = { Show-Command -Name Unlock-UserObject }
+           DisableConfirm = $true
+       }
+   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
+   
+   This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
+   It will invoke the Show-Command cmdlet which will show a windows form with the parameters of the custom 
+   cmdlet Unlock-UserObject. It will not confirm with the user before invokation. The user may cancel the
+   windows form without executing the cmdlet.
+.NOTES
+   NAME: New-MenuItem
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
+[cmdletbinding(DefaultParameterSetName="ByValue")]
+[OutputType([PSCustomObject])]
 Param
 (
+    [Parameter(Mandatory, ParameterSetName="ByValue")]
+    [Parameter(Mandatory,ParameterSetName="ByObject")]
     [string]
     $Name
     ,
+    [Parameter(ParameterSetName="ByValue")]
+    [Parameter(ParameterSetName="ByObject")]
     [string]
     $DisplayName
     ,
+    [Parameter(ParameterSetName="ByValue")]
+    [Parameter(ParameterSetName="ByObject")]
     [string]
     $Description
     ,
+    [Parameter(ParameterSetName="ByValue")]
+    [Parameter(ParameterSetName="ByObject")]
     [scriptblock]
     $ActionScriptblock
     ,
-    [bool]
-    $ConfirmBeforeInvoke = $true
+    [Parameter(ParameterSetName="ByValue")]
+    [Parameter(ParameterSetName="ByObject")]
+    [switch]
+    $DisableConfirm
     ,
+    
+    [Parameter(ParameterSetName="ByValue")]
     [int]
-    $ParentMenuID
+    $MenuID
+    ,
+    [Parameter(ValueFromPipeline, ParameterSetName="ByObject")]
+    [PSCustomObject]
+    $MenuObject
 )
 
 BEGIN 
@@ -186,57 +395,56 @@ BEGIN
 
 PROCESS
 {
-    $menuItem = [PSCustomObject]@{
-        Id = 0
+    $menuItem = [PSCustomObject]@{        
         Name = "$Name"
         DisplayName = "$DisplayName"
         Description = "$Description"
         ActionScriptblock = $ActionScriptblock
-        ConfirmBeforeInvoke = $ConfirmBeforeInvoke
-        ParentMenu = 0
+        ConfirmBeforeInvoke = -not $DisableConfirm
     }
-
-    $nameConflict = $null
-    $nameConflict = $script:menuItems.Where({$_.Name -eq "$Name"})
 
     if ($script:Menus.count -eq 0)
     {
-        New-Menu -Name MainMenu -DisplayName "Main Menu" -IsMainMenu
+        Write-Verbose -Message "$f -  Creating main menu"
+        $null = New-Menu -Name MainMenu -DisplayName "Main Menu" -IsMainMenu
     }
 
-    if (-not $nameConflict)
+    if ($PSBoundParameters.ContainsKey("MenuID"))
     {
-        $MainMenu = Get-Menu -MainMenu
+        $menu = Get-Menu -MenuID $MenuID
+    }
+    else
+    {
+        $menu = Get-Menu -MainMenu    
+    }
 
-        if (-not $MainMenu)
+    if ($PSBoundParameters.ContainsKey("MenuObject"))
+    {
+        $menu = $MenuObject
+    }
+
+    foreach ($Item in $menu.MenuItems)
+    {
+        if ($Item.Name -eq "$Name")
         {
             Write-Error -Message "$f -  Unable to find Main Menu"
             break
         }
-
-        if ($PSBoundParameters.ContainsKey("ParentMenuID"))
-        {
-             $menuItem.ParentMenu = $ParentMenuID
-        }
-        else
-        {
-            $menuItem.ParentMenu = $MainMenu.Id
-        }        
-
-        Write-Verbose -Message "$f -  Adding menuItem [$Name]"
-
-        $insertedId = $script:menuItems.Add($menuItem)        
-        $script:menuItems[$insertedId].Id = $insertedId
     }
-    else
+
+    $menuIndex = $script:Menus.IndexOf($menu)
+
+    if ($menuIndex -eq -1)
     {
-        Write-Warning -Message "$f -  Menuitem with [$Name] already exists"
+        throw "$f - Error, unable to find menu"
     }
+
+    $null = $script:Menus[$menuIndex].MenuItems.Add($menuItem)
 }
 
 END
 {
-    Write-Verbose -Message "$f-  END"
+    Write-Verbose -Message "$f - END"
 }
 }
 
@@ -256,24 +464,31 @@ Param
 )
 
 BEGIN
-{}
+{
+    $f = $MyInvocation.InvocationName
+    Write-Verbose -Message "$f - START"
+}
 
 PROCESS
 {
     $menu = $script:Menus.Where({$_.Name -eq "$Name"})
-
+    
     if ($menu)
     {
+        $menuIndex = $script:Menus.IndexOf($menu)
+
         foreach ($key in $PSBoundParameters.Keys)
         {
             Write-Verbose -Message "$f -  Setting [$key] to value $($PSBoundParameters.$key)"
-            $script:Menus[$menu.id].$key = $PSBoundParameters.$key
+            $script:Menus[$menuIndex].$key = $PSBoundParameters.$key
         }    
     }       
 }
 
 END
-{}
+{
+    Write-Verbose -Message "$f - END"
+}
 }
 
 function Set-MenuItem
@@ -294,7 +509,10 @@ Param
     $ActionScriptblock
     ,
     [bool]
-    $ConfirmBeforeInvoke
+    $DisableConfirm
+    ,
+    [int]
+    $MenuID
 )
 
 BEGIN
@@ -305,14 +523,15 @@ BEGIN
 
 PROCESS
 {
-    $menuItem = $script:menuItems.GetEnumerator().Where({$_.Name -eq "$Name"})
+    $menuItem = $script:Menus[$MenuID].MenuItems.Where({$_.Name -eq "$Name"})
 
     if ($menuItem)
     {
+        $menuItemIndex = $script:Menus[$MenuID].IndexOf($menuItem)
         foreach ($key in $PSBoundParameters.Keys)
         {
             Write-Verbose -Message "$f -  Setting [$key] to value $($PSBoundParameters.$key)"
-            $script:menuItems[$menuItem.id].$key = $PSBoundParameters.$key
+            $script:Menus[$MenuID].MenuItems[$menuItemIndex].$key = $PSBoundParameters.$key
         }
     }
     else    
@@ -327,7 +546,7 @@ END
 }
 }
 
-    function Set-MenuOption
+function Set-MenuOption
 {
 [cmdletbinding()]
 Param
@@ -345,13 +564,13 @@ Param
     $HeadingColor = [consolecolor]::white
     ,
     [string]
-    $SubHeading = "[SubHeading not set ]"
+    $SubHeading = "[SubHeading not set]"
     ,
     [ConsoleColor]
     $SubHeadingColor = [consolecolor]::white
     ,
     [string]
-    $FooterText = "[FooterText not set]"
+    $FooterText
     ,
     [ConsoleColor]
     $FooterTextColor = [consolecolor]::white
@@ -391,6 +610,38 @@ END
 
 function Show-Menu
 {
+<#
+.Synopsis
+   Show a Menu.
+.DESCRIPTION
+   If executed without parameters, it will build and show the main Menu. If the MenuID parameter is 
+   specified, it will show the menu with that ID. You may also use the cmdlet to invoke a specific 
+   Menu-Item on a specific menu.
+.EXAMPLE
+   c:> Show-Menu
+   
+   This will show the main Menu if defined.
+.EXAMPLE
+   c:> Show-Menu -MenuId 1
+   
+   This will show the menu at index 1. Use Get-Menu to find the index (zero-based array)
+.EXAMPLE
+   c:> Show-Menu -InvokeItem 2 -MenuId 0
+   
+   This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
+   confirmation before invoking it, the user will be prompted before invokation.
+.EXAMPLE
+   c:> Show-Menu -InvokeItem 2 -MenuId 0 -force
+   
+   This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
+   confirmation before invoking it, the user will not be prompted before invokation since the
+   force flag has been specified.
+.NOTES
+   NAME: Show-Menu
+   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   LASTEDIT: Aug 2016
+   KEYWORDS: General scripting Controller Menu   
+#>
 [cmdletbinding()]
 Param
 (
@@ -413,7 +664,7 @@ BEGIN
 
     if (-not $mainMenu)
     {
-        Write-Warning -Message "Please add a menu first"
+        Write-Warning -Message "Please add a menu first using the New-Menu cmdlet"
         break
     }
 }
@@ -422,7 +673,7 @@ PROCESS
 {
     if ($PSBoundParameters.ContainsKey("InvokeItem"))
     {
-        $menuSelected = $script:menuItems.Where({$_.ID -eq $InvokeItem})
+        $menuSelected = $script:Menus[$MenuID].MenuItems[$InvokeItem]
 
         if($menuSelected)
         {
@@ -490,17 +741,23 @@ END
 
     if ($PSBoundParameters.ContainsKey("MenuID"))
     {
-        $mainMenu = Get-Menu | where Id -eq $MenuID
-        if (-not $mainMenu)
+        $menu = Get-Menu -MenuId $MenuID
+        if (-not $menu)
         {
             Write-Error -Exception "$f -  Could not find menu with ID [$MenuID]"
         }
-    }    
+    }
+    else 
+    {
+        $menu = Get-Menu -MainMenu
+    }
+
+    $menuIndex = $script:Menus.IndexOf($menu)
    
     $menuFrame = $script:MenuOptions.MenuFillChar * ($maxWith - 2)
     $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
 
-    $null = $menuLines.Add((Get-MenuLine -Text $mainMenu.DisplayName -Color $script:MenuOptions.MenuNameColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menu.DisplayName -Color $script:MenuOptions.MenuNameColor))
     
     $menuEmptyLine = " " * ($maxWith - 2)
     $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
@@ -516,12 +773,11 @@ END
     $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
     $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
 
-    $currentMenuItems = Get-MenuItem | Where-Object ParentMenu -eq $mainMenu.id
-
-    foreach ($item in $currentMenuItems)
+    foreach ($item in $menu.MenuItems)
     {  
         $menuColor = $script:MenuOptions.MenuItemColor
-        $null = $menuLines.Add((Get-MenuLine -Text "$($item.Id). $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))
+        $menuItemIndex = $script:menus[$menuIndex].MenuItems.IndexOf($item)
+        $null = $menuLines.Add((Get-MenuLine -Text "$menuItemIndex. $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))
     }
 
     $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
@@ -538,19 +794,21 @@ END
         Write-Host -Object $line.Text -ForegroundColor $line.Color -NoNewline
         Write-Host -Object $script:MenuOptions.MenuFillChar -ForegroundColor $script:MenuOptions.MenuFillColor
     }
+
     $userSelection = (Read-Host -Prompt "Please enter number to execute action")
 
     try
     {
-        $actionItemSelectionIndex = [int]$userSelection
+        $actionItemSelectionIndex = [int]($userSelection)
     }
     catch
     {
+        Write-Error -Message $_.Exception.Message
         Write-Host -Object "Menuitem not found [$userSelection]" -ForegroundColor DarkYellow
         break
     }
 
-    $menuSelected = $script:menuItems.Where({$_.ID -eq $actionItemSelectionIndex})
+    $menuSelected = $menu.MenuItems[$actionItemSelectionIndex]
 
     if ($menuSelected)
     {
@@ -574,6 +832,7 @@ END
     {
         Write-Host -Object "Menuitem not found [$userSelection]" -ForegroundColor DarkYellow
     }
+
     Write-Verbose -Message "$f-  END"
 }
 }

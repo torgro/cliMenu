@@ -16,7 +16,10 @@ Param
     $ActionScriptblock
     ,
     [bool]
-    $ConfirmBeforeInvoke
+    $DisableConfirm
+    ,
+    [int]
+    $MenuID
 )
 
 BEGIN
@@ -27,14 +30,15 @@ BEGIN
 
 PROCESS
 {
-    $menuItem = $script:menuItems.GetEnumerator().Where({$_.Name -eq "$Name"})
+    $menuItem = $script:Menus[$MenuID].MenuItems.Where({$_.Name -eq "$Name"})
 
     if ($menuItem)
     {
+        $menuItemIndex = $script:Menus[$MenuID].IndexOf($menuItem)
         foreach ($key in $PSBoundParameters.Keys)
         {
             Write-Verbose -Message "$f -  Setting [$key] to value $($PSBoundParameters.$key)"
-            $script:menuItems[$menuItem.id].$key = $PSBoundParameters.$key
+            $script:Menus[$MenuID].MenuItems[$menuItemIndex].$key = $PSBoundParameters.$key
         }
     }
     else    
