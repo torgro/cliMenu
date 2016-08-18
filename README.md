@@ -1,5 +1,5 @@
 # Building interactive Menus in Powershell
-===
+---
 
 This is a Controller module. It uses Write-Host to create a Menu in the console. As the name implies
 it builds a CLI menu, however if you think your users might fancy a more GUI like experience, you
@@ -7,7 +7,7 @@ should look up a cmdlet named Show-Command. Show-Command will build a GUI for yo
 create a windows form with fields for all your parameters and parametersets.
 
 ## Design goals
-===
+---
 
 I have seen to many crappy menus that is a mixture of controller script and business logic. It is in 
 essence a wild west out there, hence my ultimate goal is to create something that makes it as easy 
@@ -18,7 +18,7 @@ as possible to create a menu and change the way it looks.
 
 
 ## Menus
-===
+---
 
 The module supports multiple Menus, however only one Main-Menu. Each menu has a collection of Menu-
 Items that the user can choose from. 
@@ -29,7 +29,7 @@ Example menu:
 
 
 ## Menu options
-===
+---
 
 Currently you can controll the following aspects of the menu (they are shared across all menus unless you change
 them before showing a sub-menu):
@@ -44,7 +44,7 @@ them before showing a sub-menu):
 * Change the Width of the Menu
 
 ## Menu-Items
-===
+---
 
 Menu-Items are the elements your users can invoke in your Menu. They have a ScriptBlock and a 
 ConfirmBeforeInvoke parameter. This way you may selectivly force the user to confirm the action
@@ -52,7 +52,7 @@ before it is invoked.
 
 
 ## Validation and return values
-===
+---
 
 The goal of this module is neither. As a toolbuilder you are responsible for validating user
 input when they invoke the ScriptBlock assosiated with the Menu-Item. Any output from the ScriptBlock 
@@ -62,7 +62,7 @@ design it using the best practice guides from Microsoft in regards to mandatory 
 
 
 ## Show-Menu
-===
+---
 This is the core cmdlet responsible for building the Menu and displaying it to the user. Executed
 without parameters it will display the Main-Menu (remember you can only have one Main-Menu). Nevertheless
 you may also use it to display Sub-Menus by specifying the parameter MenuId which is the index of the
@@ -72,6 +72,7 @@ with a confirmation request before execution. You can override this with the -Fo
 directly.
 
 ## Examples
+---
 
 A menu which uses the Show-Command cmdlet (complete script in [example.ps1](https://github.com/torgro/cliMenu/blob/master/Scripts/Example.ps1):
 [Example1]: https://github.com/torgro/cliMenu/blob/master/Bin/Example1.png 
@@ -142,7 +143,7 @@ Show-Menu
 
 
 ### Disclaimer
-
+---
 THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
