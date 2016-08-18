@@ -136,7 +136,7 @@ Show-Menu
 ![alt text][Example21]
 ![alt text][Example22]
 
-That is it. If you have any questions or issues with them, look me up on twitter (@toreGroneng) or file an issue!
+That is it. If you have any questions or issues, look me up on twitter (@toreGroneng) or file an issue!
 
 ### Disclaimer
 
