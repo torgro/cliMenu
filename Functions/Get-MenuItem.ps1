@@ -65,7 +65,7 @@ PROCESS
     if ($PSBoundParameters.ContainsKey("MenuName"))
     {
         write-verbose -message "$f -  Getting by MenuName"
-        $script:Menus.Where({$_.Name -eq "$MenuName"})
+        $script:Menus.Where({$_.Name -eq "$MenuName"}) | Select-Object -ExpandProperty MenuItems
     }
 
     if ($PSBoundParameters.Containskey("MenuId"))
