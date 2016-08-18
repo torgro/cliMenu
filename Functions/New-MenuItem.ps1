@@ -53,36 +53,25 @@ function New-MenuItem
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
-[cmdletbinding(DefaultParameterSetName="ByValue")]
+[cmdletbinding()]
 [OutputType([PSCustomObject])]
 Param
 (
-    [Parameter(Mandatory, ParameterSetName="ByValue")]
-    [Parameter(Mandatory,ParameterSetName="ByObject")]
     [string]
     $Name
     ,
-    [Parameter(ParameterSetName="ByValue")]
-    [Parameter(ParameterSetName="ByObject")]
     [string]
     $DisplayName
     ,
-    [Parameter(ParameterSetName="ByValue")]
-    [Parameter(ParameterSetName="ByObject")]
     [string]
     $Description
     ,
-    [Parameter(ParameterSetName="ByValue")]
-    [Parameter(ParameterSetName="ByObject")]
     [scriptblock]
     $Action
-    ,
-    [Parameter(ParameterSetName="ByValue")]
-    [Parameter(ParameterSetName="ByObject")]
+    ,    
     [switch]
     $DisableConfirm
-    ,
-    
+    ,    
     [Parameter(ParameterSetName="ByValue")]
     [int]
     $MenuID
