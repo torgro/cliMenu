@@ -6,7 +6,7 @@ function New-MenuItem
 .DESCRIPTION
    Menu-Items are the action elements of the Menu. You add Menu-Items to a Menu. 
 .EXAMPLE
-   C:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -ActionScriptblock { Set-UserPassword }
+   C:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -Action { Set-UserPassword }
    
    This will create a new Menu-Item. If selected it will execute the custom cmdlet Set-UserPassword. 
    Since no MenuId is specified, it will be added to the Main-Menu. The switch parameter DisableConfirm
@@ -16,7 +16,7 @@ function New-MenuItem
    C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
-           ActionScriptblock = { Unlock-UserObject }
+           Action = { Unlock-UserObject }
            DisableConfirm = $true
        }
    C:> $menu | New-MenuItem @NewMenuItem
@@ -27,7 +27,7 @@ function New-MenuItem
    C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
-           ActionScriptblock = { Unlock-UserObject }
+           Action = { Unlock-UserObject }
            DisableConfirm = $true
        }
    C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
@@ -38,7 +38,7 @@ function New-MenuItem
    C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
-           ActionScriptblock = { Show-Command -Name Unlock-UserObject }
+           Action = { Show-Command -Name Unlock-UserObject }
            DisableConfirm = $true
        }
    C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
@@ -75,7 +75,7 @@ Param
     [Parameter(ParameterSetName="ByValue")]
     [Parameter(ParameterSetName="ByObject")]
     [scriptblock]
-    $ActionScriptblock
+    $Action
     ,
     [Parameter(ParameterSetName="ByValue")]
     [Parameter(ParameterSetName="ByObject")]
@@ -104,7 +104,7 @@ PROCESS
         Name = "$Name"
         DisplayName = "$DisplayName"
         Description = "$Description"
-        ActionScriptblock = $ActionScriptblock
+        Action = $Action
         ConfirmBeforeInvoke = -not $DisableConfirm
     }
 
