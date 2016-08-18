@@ -41,8 +41,8 @@ Param
     [switch]
     $Force
     ,
-    [int]
-    $MenuID
+    [string]
+    $MenuName
 )
 
 BEGIN
@@ -63,7 +63,7 @@ PROCESS
 {
     if ($PSBoundParameters.ContainsKey("InvokeItem"))
     {
-        $menuSelected = $script:Menus[$MenuID].MenuItems[$InvokeItem]
+        $menuSelected = (Get-Menu -Name $MenuName).MenuItems[$InvokeItem] #$script:Menus[$MenuID].MenuItems[$InvokeItem]
 
         if($menuSelected)
         {
@@ -80,10 +80,10 @@ PROCESS
                 }                
             }
 
-            if ($menuSelected.ActionScriptblock)
+            if ($menuSelected.Action)
             {
                 Write-Host -Object "Invoking [$($menuSelected.Name)]" -ForegroundColor DarkYellow
-                $menuSelected.ActionScriptblock.Invoke()
+                $menuSelected.Action.Invoke()
                 Write-Host -Object "Invoke DONE!" -ForegroundColor DarkYellow
                 break
             }            
@@ -129,17 +129,18 @@ END
         }
     }
 
-    if ($PSBoundParameters.ContainsKey("MenuID"))
+    if ($PSBoundParameters.ContainsKey("MenuName"))
     {
-        $menu = Get-Menu -MenuId $MenuID
-        if (-not $menu)
-        {
-            Write-Error -Exception "$f -  Could not find menu with ID [$MenuID]"
-        }
+        $menu = Get-Menu -Name $MenuName        
     }
     else 
     {
         $menu = Get-Menu -MainMenu
+    }
+
+    if (-not $menu)
+    {
+        Write-Error -Exception "$f -  Could not find menu"
     }
 
     $menuIndex = $script:Menus.IndexOf($menu)
@@ -211,10 +212,10 @@ END
                 break
             }
         }
-        if ($menuSelected.ActionScriptblock)
+        if ($menuSelected.Action)
         {
             Write-Host -Object "Invoking [$($menuSelected.Name)]" -ForegroundColor DarkYellow
-            $menuSelected.ActionScriptblock.Invoke()
+            $menuSelected.Action.Invoke()
             Write-Host -Object "Invoke DONE!" -ForegroundColor DarkYellow
         }
     }

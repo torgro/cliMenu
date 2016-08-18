@@ -21,7 +21,7 @@ BEGIN
 
 PROCESS
 {
-    $menu = $script:Menus.Where({$_.Name -eq "$Name"})
+    $menu = Get-Menu -Name "$Name"
     
     if ($menu)
     {

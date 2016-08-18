@@ -12,10 +12,10 @@
 RootModule = 'CliMenu.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.37.0'
+ModuleVersion = '1.0.42.0'
 
 # ID used to uniquely identify this module
-GUID = '438f5419-a120-4c91-a64c-88281f90dfb8'
+GUID = '4d7b4666-11ad-486b-a3ba-86e69bf4c267'
 
 # Author of this module
 Author = 'Tore Grøneng @toregroneng tore@firstpoint.no'
@@ -67,7 +67,7 @@ FormatsToProcess = @()
 
 # Functions to export from this module
 FunctionsToExport = 'Get-Menu', 'Get-MenuItem', 'Get-MenuOption', 'New-Menu', 'New-MenuItem', 
-               'Set-Menu', 'Set-MenuItem', 'Set-MenuOption', 'Show-Menu'
+               'Set-MenuOption', 'Show-Menu'
 
 # Cmdlets to export from this module
 CmdletsToExport = '*'

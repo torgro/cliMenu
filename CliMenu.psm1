@@ -1,6 +1,4 @@
-﻿#$script:menuItems = New-Object -TypeName System.Collections.ArrayList
-
-$script:Menus = New-Object -TypeName System.Collections.ArrayList
+﻿$script:Menus = New-Object -TypeName System.Collections.ArrayList
 
 $script:MenuOptions = [pscustomobject]@{
     MenuFillChar    = "*"
@@ -268,18 +266,20 @@ PROCESS
         MenuItems = New-Object -TypeName System.Collections.ArrayList
     }
 
+    $currentMainMenu = Get-Menu -MainMenu
+
     if ($PSBoundParameters.ContainsKey("IsMainMenu"))
-    {
-        $currentMainMenu = $script:Menus.Where({$_.IsMainMenu -eq $true})
+    {        
         if ($currentMainMenu)
         {
             Write-Error -Message "$f -  You can only have one Main Menu. Currently [$($currentMainMenu.Name)] is your main menu"    
             break        
-        }
-        else
-        {
-            $newMenu.IsMainMenu = $true
-        }
+        }      
+    }
+
+    if (-not $currentMainMenu)
+    {
+        $newMenu.IsMainMenu = $true
     }
 
     write-Verbose -Message "Creating menu [$Name]"
@@ -348,7 +348,7 @@ function New-MenuItem
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
-[cmdletbinding()]
+[cmdletbinding(DefaultParameterSetName="none")]
 [OutputType([PSCustomObject])]
 Param
 (
@@ -429,104 +429,6 @@ PROCESS
     }
 
     $null = $script:Menus[$menuIndex].MenuItems.Add($menuItem)
-}
-
-END
-{
-    Write-Verbose -Message "$f - END"
-}
-}
-
-function Set-Menu
-{
-[cmdletbinding()]
-Param
-(
-    [string]
-    $Name
-    ,
-    [string]
-    $DisplayName
-    ,
-    [switch]
-    $IsMainMenu
-)
-
-BEGIN
-{
-    $f = $MyInvocation.InvocationName
-    Write-Verbose -Message "$f - START"
-}
-
-PROCESS
-{
-    $menu = $script:Menus.Where({$_.Name -eq "$Name"})
-    
-    if ($menu)
-    {
-        $menuIndex = $script:Menus.IndexOf($menu)
-
-        foreach ($key in $PSBoundParameters.Keys)
-        {
-            Write-Verbose -Message "$f -  Setting [$key] to value $($PSBoundParameters.$key)"
-            $script:Menus[$menuIndex].$key = $PSBoundParameters.$key
-        }    
-    }       
-}
-
-END
-{
-    Write-Verbose -Message "$f - END"
-}
-}
-
-function Set-MenuItem
-{
-[cmdletbinding()]
-Param
-(
-    [string]
-    $Name
-    ,
-    [string]
-    $DisplayName
-    ,
-    [string]
-    $Description
-    ,
-    [scriptblock]
-    $ActionScriptblock
-    ,
-    [bool]
-    $DisableConfirm
-    ,
-    [int]
-    $MenuID
-)
-
-BEGIN
-{
-    $f = $MyInvocation.InvocationName
-    Write-Verbose -Message "$f - START"
-}
-
-PROCESS
-{
-    $menuItem = $script:Menus[$MenuID].MenuItems.Where({$_.Name -eq "$Name"})
-
-    if ($menuItem)
-    {
-        $menuItemIndex = $script:Menus[$MenuID].IndexOf($menuItem)
-        foreach ($key in $PSBoundParameters.Keys)
-        {
-            Write-Verbose -Message "$f -  Setting [$key] to value $($PSBoundParameters.$key)"
-            $script:Menus[$MenuID].MenuItems[$menuItemIndex].$key = $PSBoundParameters.$key
-        }
-    }
-    else    
-    {
-        Write-Error -Message "$f -  Unable to find menuItem with name [$Name]"
-    }
 }
 
 END
@@ -640,8 +542,8 @@ Param
     [switch]
     $Force
     ,
-    [int]
-    $MenuID
+    [string]
+    $MenuName
 )
 
 BEGIN
@@ -662,7 +564,7 @@ PROCESS
 {
     if ($PSBoundParameters.ContainsKey("InvokeItem"))
     {
-        $menuSelected = $script:Menus[$MenuID].MenuItems[$InvokeItem]
+        $menuSelected = (Get-Menu -Name $MenuName).MenuItems[$InvokeItem] #$script:Menus[$MenuID].MenuItems[$InvokeItem]
 
         if($menuSelected)
         {
@@ -679,10 +581,10 @@ PROCESS
                 }                
             }
 
-            if ($menuSelected.ActionScriptblock)
+            if ($menuSelected.Action)
             {
                 Write-Host -Object "Invoking [$($menuSelected.Name)]" -ForegroundColor DarkYellow
-                $menuSelected.ActionScriptblock.Invoke()
+                $menuSelected.Action.Invoke()
                 Write-Host -Object "Invoke DONE!" -ForegroundColor DarkYellow
                 break
             }            
@@ -728,17 +630,18 @@ END
         }
     }
 
-    if ($PSBoundParameters.ContainsKey("MenuID"))
+    if ($PSBoundParameters.ContainsKey("MenuName"))
     {
-        $menu = Get-Menu -MenuId $MenuID
-        if (-not $menu)
-        {
-            Write-Error -Exception "$f -  Could not find menu with ID [$MenuID]"
-        }
+        $menu = Get-Menu -Name $MenuName        
     }
     else 
     {
         $menu = Get-Menu -MainMenu
+    }
+
+    if (-not $menu)
+    {
+        Write-Error -Exception "$f -  Could not find menu"
     }
 
     $menuIndex = $script:Menus.IndexOf($menu)
@@ -810,10 +713,10 @@ END
                 break
             }
         }
-        if ($menuSelected.ActionScriptblock)
+        if ($menuSelected.Action)
         {
             Write-Host -Object "Invoking [$($menuSelected.Name)]" -ForegroundColor DarkYellow
-            $menuSelected.ActionScriptblock.Invoke()
+            $menuSelected.Action.Invoke()
             Write-Host -Object "Invoke DONE!" -ForegroundColor DarkYellow
         }
     }

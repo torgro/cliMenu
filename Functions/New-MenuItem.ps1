@@ -53,7 +53,7 @@ function New-MenuItem
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
-[cmdletbinding()]
+[cmdletbinding(DefaultParameterSetName="none")]
 [OutputType([PSCustomObject])]
 Param
 (

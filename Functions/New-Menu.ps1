@@ -58,18 +58,20 @@ PROCESS
         MenuItems = New-Object -TypeName System.Collections.ArrayList
     }
 
+    $currentMainMenu = Get-Menu -MainMenu
+
     if ($PSBoundParameters.ContainsKey("IsMainMenu"))
-    {
-        $currentMainMenu = $script:Menus.Where({$_.IsMainMenu -eq $true})
+    {        
         if ($currentMainMenu)
         {
             Write-Error -Message "$f -  You can only have one Main Menu. Currently [$($currentMainMenu.Name)] is your main menu"    
             break        
-        }
-        else
-        {
-            $newMenu.IsMainMenu = $true
-        }
+        }      
+    }
+
+    if (-not $currentMainMenu)
+    {
+        $newMenu.IsMainMenu = $true
     }
 
     write-Verbose -Message "Creating menu [$Name]"

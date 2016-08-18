@@ -1,5 +1,3 @@
-#$script:menuItems = New-Object -TypeName System.Collections.ArrayList
-
 $script:Menus = New-Object -TypeName System.Collections.ArrayList
 
 $script:MenuOptions = [pscustomobject]@{
