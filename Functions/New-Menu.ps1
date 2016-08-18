@@ -10,16 +10,16 @@ function New-Menu
 .PARAMETER Name
    Normally you would like to specify a name without space and Camel-case the name.
 .EXAMPLE
-   c:> New-Menu -Name "MainMenu"
+   C:> New-Menu -Name "MainMenu"
    
    This will create a new Menu with name MainMenu. If this is the first Menu, it will be
    created as a main Menu
 .EXAMPLE
-   c:> New-Menu -Name "MainMenu" -IsMainMenu
+   C:> New-Menu -Name "MainMenu" -IsMainMenu
    
    This will create a new Menu with name MainMenu and set is as a main Menu
 .EXAMPLE
-   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype"
+   C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype"
    
    This will create a new Menu with name sub1 and DisplayName Sub-Menu for Skype
 .NOTES

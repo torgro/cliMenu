@@ -8,20 +8,20 @@ function Show-Menu
    specified, it will show the menu with that ID. You may also use the cmdlet to invoke a specific 
    Menu-Item on a specific menu.
 .EXAMPLE
-   c:> Show-Menu
+   C:> Show-Menu
    
    This will show the main Menu if defined.
 .EXAMPLE
-   c:> Show-Menu -MenuId 1
+   C:> Show-Menu -MenuId 1
    
    This will show the menu at index 1. Use Get-Menu to find the index (zero-based array)
 .EXAMPLE
-   c:> Show-Menu -InvokeItem 2 -MenuId 0
+   C:> Show-Menu -InvokeItem 2 -MenuId 0
    
    This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
    confirmation before invoking it, the user will be prompted before invokation.
 .EXAMPLE
-   c:> Show-Menu -InvokeItem 2 -MenuId 0 -force
+   C:> Show-Menu -InvokeItem 2 -MenuId 0 -force
    
    This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
    confirmation before invoking it, the user will not be prompted before invokation since the

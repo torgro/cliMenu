@@ -1,47 +1,33 @@
-﻿remove-module climenu -ErrorAction SilentlyContinue; Import-Module .\CliMenu.psd1
+﻿Remove-Module cliMenu -ErrorAction SilentlyContinue; Import-Module .\CliMenu.psd1
 
-Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar / -MenuFillColor DarkYellow
+Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar "#" -MenuFillColor DarkYellow
 Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
+Set-MenuOption -MaxWith 60
 
-$newItem = @{
+$newItem1 = @{
     Name = "menu0"
-    DisplayName = "Reset user password"
+    DisplayName = "Launch Write-Host as a GUI"
     ActionScriptblock = { show-command -Name Write-host }
+    DisableConfirm = $true
 }
 
-New-MenuItem @newItem -Verbose
+New-MenuItem @newItem1
 
-
-$newItem = @{
+$newItem2 = @{
     Name = "menu1"
     DisplayName = "Go to submenu"
     ActionScriptblock = { Show-Menu -MenuID 1 }
 }
 
-New-MenuItem @newItem -ConfirmBeforeInvoke $false
+New-MenuItem @newItem2 -DisableConfirm
 
-New-Menu -Name SubMenu -DisplayName "*** SubMenu1 ***"
-
-function Write-Console
-{
-Param(
-    [Parameter(Mandatory)]
-    $Text
-)
-
-Write-Host "OUTPUT: $Text"
+$newItemSub = @{
+    Name = "menu1"
+    DisplayName = "Go to Main Menu"
+    ActionScriptblock = { Show-Menu }
 }
 
-$newItem = @{
-    Name = "sub1"
-    DisplayName = "SubMenu action"
-    ActionScriptblock = { Write-Console }
-}
+New-Menu -Name SubMenu -DisplayName "*** SubMenu1 ***" | New-MenuItem @newItemSub -DisableConfirm
 
-New-MenuItem @newItem -ParentMenuID 1 -ConfirmBeforeInvoke $false
-
-
-New-MenuItem @newItem -ConfirmBeforeInvoke $false
-Set-Menu -Name MainMenu -DisplayName "* * *    M a i n    M e n u   * * *"
-Clear-Host
+clear-host
 Show-Menu

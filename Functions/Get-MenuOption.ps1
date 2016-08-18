@@ -6,7 +6,7 @@ function Get-MenuOption
 .DESCRIPTION
    Returns a PSCustomObject with all menu options. This CmdLet has no parameters
 .EXAMPLE
-   c:> Get-MenuOption
+   C:> Get-MenuOption
    
    Returns all menu-items for all menus
 .NOTES

@@ -24,19 +24,19 @@ function Get-Menu
 .DESCRIPTION
    Returns a list of menus by name, id or just the main menu
 .EXAMPLE
-   c:> Get-Menu
+   C:> Get-Menu
    
    Returns all menus
 .EXAMPLE
-   c:> Get-Menu -MainMenu
+   C:> Get-Menu -MainMenu
    
    Returns the Main Menu only
 .EXAMPLE
-   c:> Get-Menu -MenuID 1
+   C:> Get-Menu -MenuID 1
    
    Returns the menu of the specified index
 .EXAMPLE
-   c:> Get-Menu -Name main*
+   C:> Get-Menu -Name main*
    
    Returns all the menus which has a name that starts with main
 .NOTES

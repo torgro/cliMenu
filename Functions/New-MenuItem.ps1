@@ -6,42 +6,42 @@ function New-MenuItem
 .DESCRIPTION
    Menu-Items are the action elements of the Menu. You add Menu-Items to a Menu. 
 .EXAMPLE
-   c:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -ActionScriptblock { Set-UserPassword }
+   C:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -ActionScriptblock { Set-UserPassword }
    
    This will create a new Menu-Item. If selected it will execute the custom cmdlet Set-UserPassword. 
    Since no MenuId is specified, it will be added to the Main-Menu. The switch parameter DisableConfirm
    is not specified and the user will have to confirm the invokation after it has been selected. 
 .EXAMPLE
-   c:> $menu = Get-Menu -Name sub1
-   c:> $NewMenuItem = @{
+   C:> $menu = Get-Menu -Name sub1
+   C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
            ActionScriptblock = { Unlock-UserObject }
            DisableConfirm = $true
        }
-   c:> $menu | New-MenuItem @NewMenuItem
+   C:> $menu | New-MenuItem @NewMenuItem
    
    This will create a new Menu-Item for the menu named sub1. The Menu-object is piped into the New-MenuItem cmdlet.
    It will invoke a custom cmdlet Unlock-UserObject and it will not confirm with the user before invokation.
 .EXAMPLE
-   c:> $NewMenuItem = @{
+   C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
            ActionScriptblock = { Unlock-UserObject }
            DisableConfirm = $true
        }
-   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
+   C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
    
    This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
    It will invoke a custom cmdlet Unlock-UserObject and it will not confirm with the user before invokation.
 .EXAMPLE
-   c:> $NewMenuItem = @{
+   C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
            ActionScriptblock = { Show-Command -Name Unlock-UserObject }
            DisableConfirm = $true
        }
-   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
+   C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
    
    This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
    It will invoke the Show-Command cmdlet which will show a windows form with the parameters of the custom 

@@ -24,19 +24,19 @@ function Get-Menu
 .DESCRIPTION
    Returns a list of menus by name, id or just the main menu
 .EXAMPLE
-   c:> Get-Menu
+   C:> Get-Menu
    
    Returns all menus
 .EXAMPLE
-   c:> Get-Menu -MainMenu
+   C:> Get-Menu -MainMenu
    
    Returns the Main Menu only
 .EXAMPLE
-   c:> Get-Menu -MenuID 1
+   C:> Get-Menu -MenuID 1
    
    Returns the menu of the specified index
 .EXAMPLE
-   c:> Get-Menu -Name main*
+   C:> Get-Menu -Name main*
    
    Returns all the menus which has a name that starts with main
 .NOTES
@@ -105,24 +105,24 @@ function Get-MenuItem
 .DESCRIPTION
    Returns a list of menus by Menu-name, Menu-ID or the menu object
 .EXAMPLE
-   c:> Get-MenuItem
+   C:> Get-MenuItem
    
    Returns all menu-items for all menus
 .EXAMPLE
-   c:> Get-MenuItem -MenuName MainMenu
+   C:> Get-MenuItem -MenuName MainMenu
    
    Returns the menu-items for the menu with name MainMenu
 .EXAMPLE
-   c:> Get-MenuItem -MenuId 1
+   C:> Get-MenuItem -MenuId 1
    
    Returns the menu-items for the menu with id 1
 .EXAMPLE
-   c:> $Menu = Get-Menu -Name SubMenuSkype
-   c:> Get-MenuItem -MenuObject $Menu
+   C:> $Menu = Get-Menu -Name SubMenuSkype
+   C:> Get-MenuItem -MenuObject $Menu
    
    Returns all the menu-items for the menu with name SubMenuSkype
 .EXAMPLE   
-   c:> Get-Menu -Name SubMenuSkype | Get-MenuItem
+   C:> Get-Menu -Name SubMenuSkype | Get-MenuItem
    
    Returns all the menu-items for the menu with name SubMenuSkype
 .NOTES
@@ -192,7 +192,7 @@ function Get-MenuOption
 .DESCRIPTION
    Returns a PSCustomObject with all menu options. This CmdLet has no parameters
 .EXAMPLE
-   c:> Get-MenuOption
+   C:> Get-MenuOption
    
    Returns all menu-items for all menus
 .NOTES
@@ -220,16 +220,16 @@ function New-Menu
 .PARAMETER Name
    Normally you would like to specify a name without space and Camel-case the name.
 .EXAMPLE
-   c:> New-Menu -Name "MainMenu"
+   C:> New-Menu -Name "MainMenu"
    
    This will create a new Menu with name MainMenu. If this is the first Menu, it will be
    created as a main Menu
 .EXAMPLE
-   c:> New-Menu -Name "MainMenu" -IsMainMenu
+   C:> New-Menu -Name "MainMenu" -IsMainMenu
    
    This will create a new Menu with name MainMenu and set is as a main Menu
 .EXAMPLE
-   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype"
+   C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype"
    
    This will create a new Menu with name sub1 and DisplayName Sub-Menu for Skype
 .NOTES
@@ -301,42 +301,42 @@ function New-MenuItem
 .DESCRIPTION
    Menu-Items are the action elements of the Menu. You add Menu-Items to a Menu. 
 .EXAMPLE
-   c:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -ActionScriptblock { Set-UserPassword }
+   C:> New-MenuItem -Name "PasswordReset" -DisplayName "Reset a user password" -ActionScriptblock { Set-UserPassword }
    
    This will create a new Menu-Item. If selected it will execute the custom cmdlet Set-UserPassword. 
    Since no MenuId is specified, it will be added to the Main-Menu. The switch parameter DisableConfirm
    is not specified and the user will have to confirm the invokation after it has been selected. 
 .EXAMPLE
-   c:> $menu = Get-Menu -Name sub1
-   c:> $NewMenuItem = @{
+   C:> $menu = Get-Menu -Name sub1
+   C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
            ActionScriptblock = { Unlock-UserObject }
            DisableConfirm = $true
        }
-   c:> $menu | New-MenuItem @NewMenuItem
+   C:> $menu | New-MenuItem @NewMenuItem
    
    This will create a new Menu-Item for the menu named sub1. The Menu-object is piped into the New-MenuItem cmdlet.
    It will invoke a custom cmdlet Unlock-UserObject and it will not confirm with the user before invokation.
 .EXAMPLE
-   c:> $NewMenuItem = @{
+   C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
            ActionScriptblock = { Unlock-UserObject }
            DisableConfirm = $true
        }
-   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
+   C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
    
    This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
    It will invoke a custom cmdlet Unlock-UserObject and it will not confirm with the user before invokation.
 .EXAMPLE
-   c:> $NewMenuItem = @{
+   C:> $NewMenuItem = @{
            Name = "UnlockUser"
            DisplayName = "Unlock a user"
            ActionScriptblock = { Show-Command -Name Unlock-UserObject }
            DisableConfirm = $true
        }
-   c:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
+   C:> New-Menu -Name "sub1" -DisplayName "Sub-Menu for Skype" | New-MenuItem @NewMenuItem
    
    This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
    It will invoke the Show-Command cmdlet which will show a windows form with the parameters of the custom 
@@ -618,20 +618,20 @@ function Show-Menu
    specified, it will show the menu with that ID. You may also use the cmdlet to invoke a specific 
    Menu-Item on a specific menu.
 .EXAMPLE
-   c:> Show-Menu
+   C:> Show-Menu
    
    This will show the main Menu if defined.
 .EXAMPLE
-   c:> Show-Menu -MenuId 1
+   C:> Show-Menu -MenuId 1
    
    This will show the menu at index 1. Use Get-Menu to find the index (zero-based array)
 .EXAMPLE
-   c:> Show-Menu -InvokeItem 2 -MenuId 0
+   C:> Show-Menu -InvokeItem 2 -MenuId 0
    
    This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
    confirmation before invoking it, the user will be prompted before invokation.
 .EXAMPLE
-   c:> Show-Menu -InvokeItem 2 -MenuId 0 -force
+   C:> Show-Menu -InvokeItem 2 -MenuId 0 -force
    
    This will invoke the Menu-Item at index 2 on the form at index 0. If the Menu-Item requires
    confirmation before invoking it, the user will not be prompted before invokation since the
