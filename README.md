@@ -43,9 +43,9 @@ them before showing a sub-menu):
 
 ## Menu-Items
 
-Menu-Items are the elements your users can invoke in your Menu. They have a ScriptBlock and a 
-ConfirmBeforeInvoke parameter. This way you may selectivly force the user to confirm the action
-before it is invoked.
+Menu-Items are the elements your users can invoke in your Menu. They have a ScriptBlock and a DisableConfirm 
+switch parameter in addition to a Name and DisplayName. With the DisableConfirm parameter, you may selectively 
+force the user to confirm the action before it is invoked.
 
 
 ## Validation and return values
@@ -63,7 +63,7 @@ This is the core cmdlet responsible for building the Menu and displaying it to t
 without parameters it will display the Main-Menu (remember you can only have one Main-Menu). Nevertheless
 you may also use it to display Sub-Menus by specifying the parameter MenuId which is the index of the
 menu. Further you may also invoke a specific Menu-Item in a specific Menu by supplying InvokeItem and MenuId
-parameters. If the Menu-Item is defined to confirm with the user before invokation, it will prompt the user
+parameters. If the Menu-Item is defined to confirm with the user before invocation, it will prompt the user
 with a confirmation request before execution. You can override this with the -Force parameter to execute it
 directly.
 
@@ -136,7 +136,7 @@ Show-Menu
 ![alt text][Example21]
 ![alt text][Example22]
 
-That is it. If you have any questions or issues with them, look me up on twitter (@toreGroneng) or file an issue!
+That is it. If you have any questions or issues, look me up on twitter (@toreGroneng) or file an issue!
 
 ### Disclaimer
 
