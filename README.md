@@ -28,7 +28,7 @@ Example menu:
 
 ## Menu options
 
-Currently you can controll the following aspects of the menu (they are shared across all menus unless you change
+Currently you can control the following aspects of the menu (they are shared across all menus unless you change
 them before showing a sub-menu):
 
 * Choose the char that creates the outer frame of the menu
@@ -69,7 +69,7 @@ directly.
 
 ## Examples
 
-A menu which uses the Show-Command cmdlet (complete script in [example.ps1](https://github.com/torgro/cliMenu/blob/master/Scripts/Example.ps1):
+A menu which uses the Show-Command cmdlet (complete script in [example.ps1](https://github.com/torgro/cliMenu/blob/master/Scripts/Example.ps1)):
 [Example1]: https://github.com/torgro/cliMenu/blob/master/Bin/Example1.png 
 
 ```powershell
@@ -136,6 +136,7 @@ Show-Menu
 ![alt text][Example21]
 ![alt text][Example22]
 
+That is it. If you have any questions or issues with them, look me up on twitter (@toreGroneng) or file an issue!
 
 ### Disclaimer
 
