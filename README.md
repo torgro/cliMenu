@@ -43,9 +43,9 @@ them before showing a sub-menu):
 
 ## Menu-Items
 
-Menu-Items are the elements your users can invoke in your Menu. They have a ScriptBlock and a 
-ConfirmBeforeInvoke parameter. This way you may selectivly force the user to confirm the action
-before it is invoked.
+Menu-Items are the elements your users can invoke in your Menu. They have a ScriptBlock and a DisableConfirm 
+switch parameter in addition to a Name and DisplayName. With the DisableConfirm parameter, you may selectively 
+force the user to confirm the action before it is invoked.
 
 
 ## Validation and return values
