@@ -63,7 +63,7 @@ This is the core cmdlet responsible for building the Menu and displaying it to t
 without parameters it will display the Main-Menu (remember you can only have one Main-Menu). Nevertheless
 you may also use it to display Sub-Menus by specifying the parameter MenuId which is the index of the
 menu. Further you may also invoke a specific Menu-Item in a specific Menu by supplying InvokeItem and MenuId
-parameters. If the Menu-Item is defined to confirm with the user before invokation, it will prompt the user
+parameters. If the Menu-Item is defined to confirm with the user before invocation, it will prompt the user
 with a confirmation request before execution. You can override this with the -Force parameter to execute it
 directly.
 
