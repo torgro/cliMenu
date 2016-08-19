@@ -1,20 +1,20 @@
-﻿    Remove-Module cliMenu -ErrorAction SilentlyContinue; Import-Module .\CliMenu.psd1
+﻿Remove-Module cliMenu -ErrorAction SilentlyContinue; Import-Module .\CliMenu.psd1
 
-    Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar "#" -MenuFillColor DarkYellow
-    Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
-    Set-MenuOption -MaxWith 60
+Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar "#" -MenuFillColor DarkYellow
+Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
+Set-MenuOption -MaxWith 60
 
-    $newItem1 = @{
-        Name = "WriteHost"
-        DisplayName = "Launch Write-Host as a GUI"
-        Action = { show-command -Name Write-host }
-        DisableConfirm = $true
-    }
+$newItem1 = @{
+    Name = "WriteHost"
+    DisplayName = "Launch Write-Host as a GUI"
+    Action = { show-command -Name Write-host }
+    DisableConfirm = $true
+}
 
-    $newMenu = @{
-        Name = "Main"
-        DisplayName = "Main Menu"
-    }
+$newMenu = @{
+    Name = "Main"
+    DisplayName = "Main Menu"
+}
 
 # Create a new menu Item
 $menuItem = New-MenuItem @newItem1
