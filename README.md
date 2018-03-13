@@ -70,7 +70,7 @@ directly.
 ## Examples
 
 A menu which uses the Show-Command cmdlet (complete script in [example.ps1](https://github.com/torgro/cliMenu/blob/master/Scripts/Example.ps1)):
-![Example1](Bin/Example1.png)
+![Example1](/Bin/Example1.png)
 
 ```powershell
 Import-Module .\CliMenu.psd1
