@@ -70,7 +70,7 @@ directly.
 ## Examples
 
 A menu which uses the Show-Command cmdlet (complete script in [example.ps1](https://github.com/torgro/cliMenu/blob/master/Scripts/Example.ps1)):
-[Example1]: https://github.com/torgro/cliMenu/blob/master/Bin/Example1.png 
+![Example1](Bin/Example1.png)
 
 ```powershell
 Import-Module .\CliMenu.psd1
@@ -102,11 +102,10 @@ $menuItem | Add-MenuItem -Menu main
 Clear-Host
 Show-Menu
 ```
-![alt text][Example1]
 
 An example with a Main-Menu and Sub-Menu:
-[Example21]: https://github.com/torgro/cliMenu/blob/master/Bin/Example21.png
-[Example22]: https://github.com/torgro/cliMenu/blob/master/Bin/Example22.png 
+![Example21](/Bin/Example21.png)
+![Example22](/Bin/Example22.png)
 
 ```powershell
 Import-Module .\CliMenu.psd1
@@ -157,10 +156,6 @@ New-Menu -Name SubMenu -DisplayName "*** SubMenu1 ***" | New-MenuItem @newItemSu
 clear-host
 Show-Menu
 ```
-
-![alt text][Example21]
-
-![alt text][Example22]
 
 That is it. If you have any questions or issues, look me up on twitter (@toreGroneng) or file an issue!
 
