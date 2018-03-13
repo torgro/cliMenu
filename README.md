@@ -22,8 +22,7 @@ The module supports multiple Menus, however only one Main-Menu. Each menu has a 
 Items that the user can choose from. 
 
 Example menu:
-[ExamleMenu]: https://github.com/torgro/cliMenu/blob/master/Bin/cliMenu.png 
-![alt text][ExamleMenu]
+![ExamleMenu]:(https://github.com/torgro/cliMenu/blob/master/Bin/cliMenu.png)
 
 
 ## Menu options
