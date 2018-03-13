@@ -22,7 +22,7 @@ The module supports multiple Menus, however only one Main-Menu. Each menu has a 
 Items that the user can choose from. 
 
 Example menu:
-![ExamleMenu]:(/Bin/cliMenu.png)
+![ExamleMenu](/Bin/cliMenu.png)
 
 
 ## Menu options
