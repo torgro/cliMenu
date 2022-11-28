@@ -50,7 +50,7 @@ force the user to confirm the action before it is invoked.
 ## Validation and return values
 
 The goal of this module is neither. As a toolbuilder you are responsible for validating user
-input when they invoke the ScriptBlock assosiated with the Menu-Item. Any output from the ScriptBlock 
+input when they invoke the ScriptBlock associated with the Menu-Item. Any output from the ScriptBlock 
 will be written in the console. As you may know, a ScriptBlock may be a small script or a call to 
 a cmdlet with parameters. I would suggest that you stick to calling custom or built-in cmdlets and 
 design it using the best practice guides from Microsoft in regards to mandatory parameters etc.
@@ -59,7 +59,7 @@ design it using the best practice guides from Microsoft in regards to mandatory 
 ## Show-Menu
 
 This is the core cmdlet responsible for building the Menu and displaying it to the user. Executed
-without parameters it will display the Main-Menu (remember you can only have one Main-Menu). Nevertheless
+without parameters it will display the Main-Menu (remember you can only have one Main-Menu). Nevertheless,
 you may also use it to display Sub-Menus by specifying the parameter MenuId which is the index of the
 menu. Further you may also invoke a specific Menu-Item in a specific Menu by supplying InvokeItem and MenuId
 parameters. If the Menu-Item is defined to confirm with the user before invocation, it will prompt the user
