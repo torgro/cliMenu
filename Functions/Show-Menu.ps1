@@ -98,16 +98,28 @@ END
 
     function Get-MenuLine
     {
+    [cmdletbinding(DefaultParameterSetName='Default')]
     Param
     (
+        [Parameter(ParameterSetName='Frame')]
+        [Parameter(ParameterSetName='Menu')]
+        [Parameter(ParameterSetName='Default')]
         [string]
         $Text
         ,
+        [Parameter(ParameterSetName='Frame')]
+        [Parameter(ParameterSetName='Menu')]
+        [Parameter(ParameterSetName='Default')]
         [consolecolor]
         $Color = [System.ConsoleColor]::White
         ,
-        [bool]
+        [Parameter(ParameterSetName='Menu')]
+        [switch]
         $IsMenuItem = $false
+        ,
+        [Parameter(ParameterSetName='Frame')]
+        [switch]
+        $IsFrame
     )
         $maxWith = $script:MenuOptions.MaxWith
 
@@ -116,9 +128,9 @@ END
             $textLine = "  " + "$Text"
             $textLine += " " * (($maxWith - 1) - $textLine.length - 1)
         }
-        else 
-        {
-            
+        
+        if ($IsMenuItem -eq $false -and $IsFrame.IsPresent -eq $false) 
+        {            
             $textLength = $Text.Length
             if (($maxWith - 4) -le $textLength)
             {
@@ -126,14 +138,22 @@ END
                 $textLength = $maxWith - 2 - 4 
                 $text = $text.Substring(0, $textLength)
             }
+
             [int]$textBlanks = (($maxWith - 2) - $textLength) / 2
+
             if ($textBlanks % 2 -ne 0)
             {
                 $textBlanks++
             }
+
             $textLine = " " * $textBlanks + $Text
             $remaining = ($maxWith - 1) - $textLine.Length - 1
             $textLine += " " * [Math]::Max(0, $remaining)
+        }
+
+        if ($IsFrame.IsPresent)
+        {
+            $textLine = $Text.PadRight($maxWith - 2).Substring(0, $maxWith - 2)
         }
         
         [pscustomobject]@{
@@ -159,38 +179,38 @@ END
     $menuIndex = $script:Menus.IndexOf($menu)
    
     $menuFrame = $script:MenuOptions.MenuFillChar * ($maxWith - 2)
-    $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor -IsFrame))
 
     $null = $menuLines.Add((Get-MenuLine -Text $menu.DisplayName -Color $script:MenuOptions.MenuNameColor))
     
     $menuEmptyLine = " " * ($maxWith - 2)
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
 
     $null = $menuLines.Add((Get-MenuLine -Text $script:MenuOptions.Heading -color $script:MenuOptions.HeadingColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
 
     $null = $menuLines.Add((Get-MenuLine -Text $script:MenuOptions.SubHeading -color $script:MenuOptions.SubHeadingColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
 
-    $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor -IsFrame))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
 
     foreach ($item in $menu.MenuItems)
     {  
         $menuColor = $script:MenuOptions.MenuItemColor
         $menuItemIndex = $script:menus[$menuIndex].MenuItems.IndexOf($item)
-        $null = $menuLines.Add((Get-MenuLine -Text "$menuItemIndex. $($item.DisplayName)" -IsMenuItem $true -Color $menuColor))
+        $null = $menuLines.Add((Get-MenuLine -Text "$menuItemIndex. $($item.DisplayName)" -IsMenuItem -Color $menuColor))
     }
 
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
 
     $null = $menuLines.Add((Get-MenuLine -Text $script:MenuOptions.FooterText -color $script:MenuOptions.FooterTextColor))
-    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuEmptyLine -color $script:MenuOptions.MenuFillColor -IsFrame))
 
-    $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor))
+    $null = $menuLines.Add((Get-MenuLine -Text $menuFrame -color $script:MenuOptions.MenuFillColor -IsFrame))
 
     foreach ($line in $menuLines)
     {
