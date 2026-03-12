@@ -29,12 +29,16 @@ $tags = @(
     "Menu"
 )
 
-$fileList = Get-ChildItem -Filter .\functions\*.ps1 | where name -NotLike "*Tests*"
+$functionFilter =  Join-Path -path . -ChildPath Functions | Join-Path -ChildPath *.ps1
+
+$fileList = Get-ChildItem -Filter $functionFilter | where name -NotLike "*Tests*"
 $ExportedFunctions = New-Object System.Collections.ArrayList
 $fileList | foreach {
     $null = $ExportedFunctions.Add($_.BaseName)
 }
+$moduleFilter = Join-Path -Path . -ChildPath *.psd1
+$modulePath = Get-ChildItem -Filter $moduleFilter | Select-Object -ExpandProperty FullName
+# Handled in build
+#Update-ModuleManifest -Path $modulePath -Tags $tags -FunctionsToExport $ExportedFunctions
 
-Update-ModuleManifest -Path .\CliMenu.psd1 -Tags $tags -FunctionsToExport $ExportedFunctions
-
-Publish-Module -NuGetApiKey $APIkey -Name .\CliMenu.psd1
+Publish-Module -NuGetApiKey $APIkey -Name $modulePath 

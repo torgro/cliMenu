@@ -1,4 +1,4 @@
-﻿function Add-MenuItem
+function Add-MenuItem
 {
 <#
 .Synopsis
@@ -34,7 +34,7 @@
    This will create a new Menu Item and add it to the main Menu.
 .NOTES
    NAME: Add-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -132,7 +132,7 @@ function Get-Menu
    Returns all the menus which has a name that starts with main
 .NOTES
    NAME: Get-Menu
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -218,7 +218,7 @@ function Get-MenuItem
    Returns all the menu-items for the menu with name SubMenuSkype
 .NOTES
    NAME: Get-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -288,7 +288,7 @@ function Get-MenuOption
    Returns all menu-items for all menus
 .NOTES
    NAME: Get-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -325,7 +325,7 @@ function New-Menu
    This will create a new Menu with name sub1 and DisplayName Sub-Menu for Skype
 .NOTES
    NAME: New-Menu
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -450,7 +450,7 @@ function New-MenuItem
    This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
 .NOTES
    NAME: New-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -631,7 +631,7 @@ function Show-Menu
    force flag has been specified.
 .NOTES
    NAME: Show-Menu
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -712,6 +712,8 @@ END
         [bool]
         $IsMenuItem = $false
     )
+        $maxWith = $script:MenuOptions.MaxWith
+
         if ($IsMenuItem)
         {
             $textLine = "  " + "$Text"
@@ -719,11 +721,22 @@ END
         }
         else 
         {
-            $maxWith = $script:MenuOptions.MaxWith
+            
             $textLength = $Text.Length
-            $textBlanks = (($maxWith - 2) - $textLength) / 2
+            if (($maxWith - 4) -le $textLength)
+            {
+                Write-Warning -Message "The test does not fit within the menu width [$text]"
+                $textLength = $maxWith - 2 - 4 
+                $text = $text.Substring(0, $textLength)
+            }
+            [int]$textBlanks = (($maxWith - 2) - $textLength) / 2
+            if ($textBlanks % 2 -ne 0)
+            {
+                $textBlanks++
+            }
             $textLine = " " * $textBlanks + $Text
-            $textLine += " " * (($maxWith - 1) - $textLine.Length - 1)
+            $remaining = ($maxWith - 1) - $textLine.Length - 1
+            $textLine += " " * [Math]::Max(0, $remaining)
         }
         
         [pscustomobject]@{

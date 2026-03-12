@@ -11,7 +11,7 @@ function Get-MenuOption
    Returns all menu-items for all menus
 .NOTES
    NAME: Get-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>

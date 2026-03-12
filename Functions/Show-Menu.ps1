@@ -28,7 +28,7 @@ function Show-Menu
    force flag has been specified.
 .NOTES
    NAME: Show-Menu
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
@@ -109,6 +109,8 @@ END
         [bool]
         $IsMenuItem = $false
     )
+        $maxWith = $script:MenuOptions.MaxWith
+
         if ($IsMenuItem)
         {
             $textLine = "  " + "$Text"
@@ -116,11 +118,22 @@ END
         }
         else 
         {
-            $maxWith = $script:MenuOptions.MaxWith
+            
             $textLength = $Text.Length
-            $textBlanks = (($maxWith - 2) - $textLength) / 2
+            if (($maxWith - 4) -le $textLength)
+            {
+                Write-Warning -Message "The test does not fit within the menu width [$text]"
+                $textLength = $maxWith - 2 - 4 
+                $text = $text.Substring(0, $textLength)
+            }
+            [int]$textBlanks = (($maxWith - 2) - $textLength) / 2
+            if ($textBlanks % 2 -ne 0)
+            {
+                $textBlanks++
+            }
             $textLine = " " * $textBlanks + $Text
-            $textLine += " " * (($maxWith - 1) - $textLine.Length - 1)
+            $remaining = ($maxWith - 1) - $textLine.Length - 1
+            $textLine += " " * [Math]::Max(0, $remaining)
         }
         
         [pscustomobject]@{
