@@ -72,9 +72,9 @@ A menu which uses the Show-Command cmdlet (complete script in [example.ps1](http
 ![Example1](/Bin/Example1.png)
 
 ```powershell
-Import-Module .\CliMenu.psd1
+Import-Module -Name CliMenu
 
-Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar "#" -MenuFillColor DarkYellow
+Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "Contoso" -MenuFillChar "#" -MenuFillColor DarkYellow
 Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
 Set-MenuOption -MaxWith 60
 
@@ -107,9 +107,9 @@ An example with a Main-Menu and Sub-Menu:
 ![Example22](/Bin/Example22.png)
 
 ```powershell
-Import-Module .\CliMenu.psd1
+Import-Module -Name CliMenu
 
-Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar "#" -MenuFillColor DarkYellow
+Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "Contoso" -MenuFillChar "#" -MenuFillColor DarkYellow
 Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
 Set-MenuOption -MaxWith 60
 

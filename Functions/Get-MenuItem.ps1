@@ -28,7 +28,7 @@ function Get-MenuItem
    Returns all the menu-items for the menu with name SubMenuSkype
 .NOTES
    NAME: Get-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>

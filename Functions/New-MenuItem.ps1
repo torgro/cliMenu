@@ -62,7 +62,7 @@ function New-MenuItem
    This will create a new Sub-Menu and add the UnlockUser Menu-Item to it using the pipeline.
 .NOTES
    NAME: New-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>

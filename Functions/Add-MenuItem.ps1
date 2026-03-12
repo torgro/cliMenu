@@ -34,7 +34,7 @@ function Add-MenuItem
    This will create a new Menu Item and add it to the main Menu.
 .NOTES
    NAME: Add-MenuItem
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>

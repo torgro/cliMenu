@@ -1,6 +1,6 @@
-﻿Remove-Module cliMenu -ErrorAction SilentlyContinue; Import-Module .\CliMenu.psd1
+﻿Remove-Module -Name cliMenu -ErrorAction SilentlyContinue; Import-Module -Name cliMenu
 
-Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "LOIS by Firstpoint" -MenuFillChar "#" -MenuFillColor DarkYellow
+Set-MenuOption -Heading "Helpdesk Inteface System" -SubHeading "Contoso" -MenuFillChar "#" -MenuFillColor DarkYellow
 Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
 Set-MenuOption -MaxWith 60
 

@@ -39,7 +39,7 @@ function Get-Menu
    Returns all the menus which has a name that starts with main
 .NOTES
    NAME: Get-Menu
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>

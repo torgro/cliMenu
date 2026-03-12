@@ -24,7 +24,7 @@ function New-Menu
    This will create a new Menu with name sub1 and DisplayName Sub-Menu for Skype
 .NOTES
    NAME: New-Menu
-   AUTHOR: Tore Groneng tore@firstpoint.no @toregroneng tore.groneng@gmail.com
+   AUTHOR: Tore Groneng @toregroneng tore.groneng@gmail.com
    LASTEDIT: Aug 2016
    KEYWORDS: General scripting Controller Menu   
 #>
