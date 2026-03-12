@@ -50,7 +50,20 @@ BEGIN
     
     if ([string]::IsNullOrEmpty($script:MenuOptions.FooterText))
     {        
-        $script:MenuOptions.FooterText = "$(Get-date) - Running as $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)"
+        
+        if ($IsLinux -eq $true -or $IsMacOS -eq $true)
+        {
+            $currentUser = $env:USER
+            if ([string]::IsNullOrWhiteSpace($currentUser))
+            {
+                $currentUser = $env:HOME
+            }
+            $script:MenuOptions.FooterText = "$(Get-date) - Running as $currentUser"
+        }
+        else 
+        {
+            $script:MenuOptions.FooterText = "$(Get-date) - Running as $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)"
+        }
     }
 }
 
